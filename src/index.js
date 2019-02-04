@@ -7,11 +7,38 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import "./styles.css";
+import styled from 'styled-components';
 import dayjs from "dayjs";
 import holiday_jp from "@holiday-jp/holiday_jp";
+import uuid from "uuid";
 const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-const cardStyle = { margin: 1 };
+
+const Container = styled.div`
+  font-family: sans-serif;
+  text-align: center;
+`;
+
+const DayCard = styled(Card)`
+  margin: 1px;
+`
+
+const DayCardContent = styled(CardContent)`
+  background: ${props => props.today ? '#f1f8e9' : '#FFFFFF'};
+`;
+
+const weekDayColors = [
+  "#dd2c00",
+  "#000000",
+  "#000000",
+  "#000000",
+  "#000000",
+  "#000000",
+  "#0091ea",
+]
+
+const DayTypography = styled(Typography)`
+  color: ${props => props.holiday ? '#dd2c00' : weekDayColors[props.weekday]} !important;
+`;
 
 function App() {
   const now = new Date();
@@ -20,8 +47,8 @@ function App() {
 
   const calendar = [...Array(beginning.getDay())].map(i => {
     return (
-      <GridListTile key={`space-${i}`}>
-        <Card />
+      <GridListTile key={uuid()}>
+        <DayCard />
       </GridListTile>
     );
   });
@@ -30,58 +57,38 @@ function App() {
   calendar.push(
     days.map(n => {
       const day = new Date(now.getFullYear(), now.getMonth(), n);
-      const CardContentStyles = {};
-      const TypographyStyles = {};
-
-      if (day.getDay() === 6) {
-        TypographyStyles.color = "#0091ea";
-      }
-      if (day.getDay() === 0 || holiday_jp.isHoliday(day)) {
-        TypographyStyles.color = "#dd2c00";
-      }
-      if (Number(day.getDate()) === Number(new Date().getDate())) {
-        CardContentStyles.background = "#f1f8e9";
-      }
       return (
         <GridListTile>
-          <Card style={cardStyle}>
-            <CardContent style={CardContentStyles}>
-              <Typography style={TypographyStyles}>{n}</Typography>
-            </CardContent>
-          </Card>
+          <DayCard>
+            <DayCardContent today={day.getDate() === new Date().getDate()}>
+              <DayTypography weekday={day.getDay()} holiday={holiday_jp.isHoliday(day)}>{n}</DayTypography>
+            </DayCardContent>
+          </DayCard>
         </GridListTile>
       );
     })
   );
 
   return (
-    <div className="App">
+    <Container>
       <Paper>
         <h2>{now.getMonth() + 1}月</h2>
         <GridList cols={7} cellHeight="auto">
           {weekdays.map((w, i) => {
-            const TypographyStyles = {};
-            console.log(i);
-            if (i === 6) {
-              TypographyStyles.color = "#0091ea";
-            }
-            if (i === 0) {
-              TypographyStyles.color = "#dd2c00";
-            }
             return (
               <GridListTile key={w}>
-                <Card style={cardStyle}>
-                  <CardContent>
-                    <Typography style={TypographyStyles}>{w}</Typography>
-                  </CardContent>
-                </Card>
+                <DayCard>
+                  <DayCardContent>
+                    <DayTypography weekday={i}>{w}</DayTypography>
+                  </DayCardContent>
+                </DayCard>
               </GridListTile>
             );
           })}
           {calendar}
         </GridList>
       </Paper>
-    </div>
+    </Container>
   );
 }
 
