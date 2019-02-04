@@ -6,12 +6,11 @@
   "main": "src/index.js",
   "dependencies": {
     "@holiday-jp/holiday_jp": "2.2.0",
-    "@material-ui/core": "3.9.1",
+    "@material-ui/core": "3.9.2",
     "dayjs": "1.8.2",
     "react": "16.7.0",
     "react-dom": "16.7.0",
-    "react-scripts": "2.1.3",
-    "uuid": "latest"
+    "react-scripts": "2.1.3"
   },
   "devDependencies": {},
   "scripts": {

@@ -7,7 +7,6 @@ import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import uuid from "uuid";
 import "./styles.css";
 import dayjs from "dayjs";
 import holiday_jp from "@holiday-jp/holiday_jp";
@@ -19,9 +18,9 @@ function App() {
   const beginning = new Date(now.getFullYear(), now.getMonth(), 1);
   const ending = dayjs(Number(now)).daysInMonth();
 
-  const calendar = [...Array(beginning.getDay())].map(() => {
+  const calendar = [...Array(beginning.getDay())].map(i => {
     return (
-      <GridListTile key={uuid()}>
+      <GridListTile key={`space-${i}`}>
         <Card />
       </GridListTile>
     );
