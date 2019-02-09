@@ -45,7 +45,7 @@ function App() {
   const beginning = new Date(now.getFullYear(), now.getMonth(), 1);
   const ending = dayjs(Number(now)).daysInMonth();
 
-  const calendar = [...Array(beginning.getDay())].map(i => {
+  const calendarSpaces = [...Array(beginning.getDay())].map(i => {
     return (
       <GridListTile key={uuid()}>
         <DayCard />
@@ -54,20 +54,18 @@ function App() {
   });
 
   const days = Array.from(Array(ending).keys()).map(n => n + 1);
-  calendar.push(
-    days.map(n => {
-      const day = new Date(now.getFullYear(), now.getMonth(), n);
-      return (
-        <GridListTile>
-          <DayCard>
-            <DayCardContent today={day.getDate() === new Date().getDate()}>
-              <DayTypography weekday={day.getDay()} holiday={holiday_jp.isHoliday(day)}>{n}</DayTypography>
-            </DayCardContent>
-          </DayCard>
-        </GridListTile>
-      );
-    })
-  );
+  const calendars = days.map(n => {
+    const day = new Date(now.getFullYear(), now.getMonth(), n);
+    return (
+      <GridListTile>
+        <DayCard>
+          <DayCardContent today={day.getDate() === new Date().getDate()}>
+            <DayTypography weekday={day.getDay()} holiday={holiday_jp.isHoliday(day)}>{n}</DayTypography>
+          </DayCardContent>
+        </DayCard>
+      </GridListTile>
+    );
+  });
 
   return (
     <Container>
@@ -85,7 +83,7 @@ function App() {
               </GridListTile>
             );
           })}
-          {calendar}
+          {[...calendarSpaces,...calendars]}
         </GridList>
       </Paper>
     </Container>
