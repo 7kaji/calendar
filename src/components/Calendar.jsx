@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import holidayJp from '@holiday-jp/holiday_jp';
-import uuid from 'uuid';
 
 const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -38,9 +37,9 @@ const Calendar = () => {
   const beginning = new Date(now.getFullYear(), now.getMonth(), 1);
   const ending = dayjs(Number(now)).daysInMonth();
 
-  const calendarSpaces = [...Array(beginning.getDay())].map(() => {
+  const calendarSpaces = Object.keys([...Array(beginning.getDay())]).map((n) => {
     const gridListTile = (
-      <GridListTile key={uuid()}>
+      <GridListTile key={`spaceDay-${n}`}>
         <DayCard />
       </GridListTile>
     );
@@ -51,7 +50,7 @@ const Calendar = () => {
   const calendars = days.map((n) => {
     const day = new Date(now.getFullYear(), now.getMonth(), n);
     return (
-      <GridListTile>
+      <GridListTile key={`day-${n}`}>
         <DayCard>
           <DayCardContent today={day.getDate() === new Date().getDate()}>
             <DayTypography
