@@ -52,10 +52,10 @@ const Calendar = () => {
     return (
       <GridListTile key={`day-${n}`}>
         <DayCard>
-          <DayCardContent today={day.getDate() === new Date().getDate()}>
+          <DayCardContent today={(day.getDate() === new Date().getDate()) ? 1 : 0}>
             <DayTypography
               weekday={day.getDay()}
-              holiday={holidayJp.isHoliday(day)}
+              holiday={(holidayJp.isHoliday(day)) ? 1 : 0}
             >
               {n}
             </DayTypography>
