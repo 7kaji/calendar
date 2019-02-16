@@ -40,7 +40,7 @@ const DayTypography = styled(Typography)`
 
 const Calendar = () => {
   const now = new Date();
-  const [currentDate, setCurrentDate] = useState(dayjs(`${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`));
+  const [currentDate, setCurrentDate] = useState(dayjs());
 
   const beginning = new Date(currentDate.year(), currentDate.month(), 1);
   const ending = dayjs(currentDate).daysInMonth();
@@ -98,6 +98,12 @@ const Calendar = () => {
             年
             { currentDate.month() + 1 }
             月
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => setCurrentDate(dayjs())}
+          >
+            今日
           </Button>
         </Grid>
         <Grid item>
