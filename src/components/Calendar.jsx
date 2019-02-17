@@ -91,8 +91,6 @@ const Calendar = () => {
           >
             <span role="img" aria-label="prev">👈</span>
           </Button>
-        </Grid>
-        <Grid item>
           <Button variant="outlined" color="primary">
             { currentDate.year() }
             年
@@ -101,17 +99,17 @@ const Calendar = () => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => setCurrentDate(dayjs())}
+            onClick={() => setCurrentDate(currentDate.add(1, 'month'))}
           >
-            今日
+            <span role="img" aria-label="next">👉</span>
           </Button>
         </Grid>
         <Grid item>
           <Button
             variant="outlined"
-            onClick={() => setCurrentDate(currentDate.add(1, 'month'))}
+            onClick={() => setCurrentDate(dayjs())}
           >
-            <span role="img" aria-label="next">👉</span>
+            今日
           </Button>
         </Grid>
       </CalendarHeader>
