@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -41,6 +41,9 @@ const DayTypography = styled(Typography)`
 const Calendar = () => {
   const now = new Date();
   const [currentDate, setCurrentDate] = useState(dayjs());
+  useEffect(() => {
+    document.title = `${currentDate.format('YYYY年MM月')}`;
+  }, [currentDate]);
 
   const beginning = new Date(currentDate.year(), currentDate.month(), 1);
   const ending = dayjs(currentDate).daysInMonth();
