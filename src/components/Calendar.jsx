@@ -39,12 +39,12 @@ const DayTypography = styled(Typography)`
 `;
 
 const Calendar = () => {
-  const now = new Date();
   const [currentDate, setCurrentDate] = useState(dayjs());
   useEffect(() => {
     document.title = `${currentDate.format('YYYY年MM月')}`;
   }, [currentDate]);
 
+  const now = new Date();
   const beginning = new Date(currentDate.year(), currentDate.month(), 1);
   const ending = dayjs(currentDate).daysInMonth();
 
