@@ -5,7 +5,7 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
-    "@holiday-jp/holiday_jp": "2.2.0",
+    "@holiday-jp/holiday_jp": "2.2.1",
     "@material-ui/core": "3.9.2",
     "dayjs": "1.8.6",
     "react": "16.8.2",
