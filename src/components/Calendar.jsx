@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
+import React, { useEffect, useContext, useReducer } from 'react';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import holidayJp from '@holiday-jp/holiday_jp';
+import CalendarContext from '../context';
+import calendarReducer from '../reducer';
+import CalendarMenu from './CalendarMenu';
 
 const dayOfTheWeekNames = ['日', '月', '火', '水', '木', '金', '土'];
-
-const CalendarHeader = styled(Grid)`
-  padding-bottom: 5px;
-`;
 
 const DayCard = styled(Card)`
   margin: 1px;
@@ -39,14 +36,18 @@ const DayTypography = styled(Typography)`
 `;
 
 const Calendar = () => {
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  // const [currentDate, setCurrentDate] = useState(dayjs());
+
+  const initialState = useContext(CalendarContext);
+  const [state, dispatch] = useReducer(calendarReducer, initialState);
+
   useEffect(() => {
-    document.title = `${currentDate.format('YYYY年MM月')}`;
-  }, [currentDate]);
+    document.title = `${state.currentDate.format('YYYY年MM月')}`;
+  }, [state.currentDate]);
 
   const now = new Date();
-  const beginning = new Date(currentDate.year(), currentDate.month(), 1);
-  const ending = dayjs(currentDate).daysInMonth();
+  const beginning = new Date(state.currentDate.year(), state.currentDate.month(), 1);
+  const ending = dayjs(state.currentDate).daysInMonth();
 
   const calendarSpaces = Object.keys([...Array(beginning.getDay())]).map((n) => {
     const gridListTile = (
@@ -59,13 +60,13 @@ const Calendar = () => {
 
   const days = Array.from(Array(ending).keys()).map(n => n + 1);
   const calendars = days.map((n) => {
-    const day = new Date(currentDate.year(), currentDate.month(), n);
+    const day = new Date(state.currentDate.year(), state.currentDate.month(), n);
     return (
       <GridListTile key={`day-${n}`}>
         <DayCard>
           <DayCardContent
-            today={(currentDate.year() === now.getFullYear()
-                    && currentDate.month() === now.getMonth()
+            today={(state.currentDate.year() === now.getFullYear()
+                    && state.currentDate.month() === now.getMonth()
                     && n === now.getDate()) ? 1 : 0}
           >
             <DayTypography
@@ -81,41 +82,8 @@ const Calendar = () => {
   });
 
   return (
-    <>
-      <CalendarHeader
-        container
-        justify="space-between"
-        alignItems="flex-start"
-      >
-        <Grid item>
-          <Button
-            variant="outlined"
-            onClick={() => setCurrentDate(currentDate.subtract(1, 'month'))}
-          >
-            <span role="img" aria-label="prev">👈</span>
-          </Button>
-          <Button variant="outlined" color="primary">
-            { currentDate.year() }
-            年
-            { currentDate.month() + 1 }
-            月
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => setCurrentDate(currentDate.add(1, 'month'))}
-          >
-            <span role="img" aria-label="next">👉</span>
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            onClick={() => setCurrentDate(dayjs())}
-          >
-            今日
-          </Button>
-        </Grid>
-      </CalendarHeader>
+    <CalendarContext.Provider value={{ state, dispatch }}>
+      <CalendarMenu />
 
       <GridList cols={7} cellHeight="auto">
         { dayOfTheWeekNames.map((w, i) => {
@@ -132,7 +100,7 @@ const Calendar = () => {
         })}
         {[...calendarSpaces, ...calendars]}
       </GridList>
-    </>
+    </CalendarContext.Provider>
   );
 };
 
