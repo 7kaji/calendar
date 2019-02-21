@@ -36,8 +36,6 @@ const DayTypography = styled(Typography)`
 `;
 
 const Calendar = () => {
-  // const [currentDate, setCurrentDate] = useState(dayjs());
-
   const initialState = useContext(CalendarContext);
   const [state, dispatch] = useReducer(calendarReducer, initialState);
 
