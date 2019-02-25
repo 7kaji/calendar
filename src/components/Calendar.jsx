@@ -47,7 +47,7 @@ const Calendar = () => {
 
   const now = new Date();
   const beginning = new Date(state.currentDate.year(), state.currentDate.month(), 1);
-  const ending = new Date(state.currentDate.year(), state.currentDate.month(), dayjs().daysInMonth());
+  const ending = new Date(state.currentDate.year(), state.currentDate.month(), state.currentDate.daysInMonth());
 
   const prevMonth = state.currentDate.subtract(1, 'month');
   const prevMonthEnding = dayjs(prevMonth).daysInMonth();
@@ -58,10 +58,11 @@ const Calendar = () => {
   const prevMonthRemainders = range((prevMonthEnding - beginning.getDay() + 1), prevMonthEnding, 1);
   const nextMonthRemainders = range(1, 6 - ending.getDay(), 1);
 
+  // TODO: Component
   const prevMonthDays = prevMonthRemainders.map((n) => {
     const day = new Date(prevMonth.year(), prevMonth.month(), n);
     const gridListTile = (
-      <GridListTile key={`spaceDay-${n}`}>
+      <GridListTile key={`prevMonthSpaceDay-${n}`}>
         <DayCard>
           <DayCardContent
             today={0}
@@ -80,10 +81,11 @@ const Calendar = () => {
     return gridListTile;
   });
 
+  // TODO: Component
   const nextMonthDays = nextMonthRemainders.map((n) => {
     const day = new Date(nextMonth.year(), nextMonth.month(), n);
     const gridListTile = (
-      <GridListTile key={`spaceDay-${n}`}>
+      <GridListTile key={`nextMonthSpaceDay-${n}`}>
         <DayCard>
           <DayCardContent
             today={0}
@@ -102,7 +104,7 @@ const Calendar = () => {
     return gridListTile;
   });
 
-  const days = Array.from(Array(dayjs().daysInMonth()).keys()).map(n => n + 1);
+  const days = Array.from(Array(state.currentDate.daysInMonth()).keys()).map(n => n + 1);
   const calendars = days.map((n) => {
     const day = new Date(state.currentDate.year(), state.currentDate.month(), n);
     return (
@@ -151,7 +153,7 @@ const Calendar = () => {
           );
           return gridList;
         })}
-        {[...prevMonthDays, ...calendars, nextMonthDays]}
+        {[...prevMonthDays, ...calendars, ...nextMonthDays]}
       </GridList>
     </CalendarContext.Provider>
   );
