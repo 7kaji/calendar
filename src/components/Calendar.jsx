@@ -1,9 +1,5 @@
 import React, { useEffect, useContext, useReducer } from 'react';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Card, CardContent, GridList, GridListTile, Typography } from '@material-ui/core';
 import styled, { css } from 'styled-components';
 import dayjs from 'dayjs';
 import holidayJp from '@holiday-jp/holiday_jp';
