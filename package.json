@@ -23,9 +23,9 @@
   },
   "scripts": {
     "start": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
+    "test": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts test --env=jsdom",
+    "eject": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts eject"
   },
   "browserslist": [
     ">0.2%",
