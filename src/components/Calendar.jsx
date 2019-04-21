@@ -19,7 +19,7 @@ const dayOfTheWeekColors = [
   '#000000',
   '#0091ea',
 ];
-const dayColors = ['#eceff1', '#FFFFFF'];
+const dayColors = ['#f8f8f8', '#FFFFFF'];
 const todayColor = '#f1f8e9';
 
 const DayCard = styled(Card)`
