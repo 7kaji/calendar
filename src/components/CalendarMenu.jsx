@@ -24,9 +24,9 @@ const CalendarMenu = () => {
           <span role="img" aria-label="prev-month">👈</span>
         </Button>
         <Button variant="outlined" color="primary">
-          { state.currentDate.year() }
+          { state.currentDate.getFullYear() }
           年
-          { state.currentDate.month() + 1 }
+          { state.currentDate.getMonth() + 1 }
           月
         </Button>
         <Button
