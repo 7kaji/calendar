@@ -1,8 +1,7 @@
 import React from 'react';
-import dayjs from 'dayjs';
 
 const CalendarContext = React.createContext({
-  currentDate: dayjs(),
+  currentDate: new Date(),
 });
 
 export default CalendarContext;
