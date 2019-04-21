@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { addMonths } from 'date-fns';
 
 export default function reducer(state, action) {

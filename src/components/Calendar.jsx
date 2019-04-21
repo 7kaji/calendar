@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useReducer } from 'react';
 import { Card, CardContent, GridList, GridListTile, Typography } from '@material-ui/core';
 import styled, { css } from 'styled-components';
-import { addMonths, lastDayOfMonth } from 'date-fns';
-import format from 'date-fns/format';
+import dateFns from "date-fns"
+// import jaLocale from 'date-fns/locale/ja'
 import holidayJp from '@holiday-jp/holiday_jp';
 import CalendarContext from '../context';
 import calendarReducer from '../reducer';
@@ -39,96 +39,50 @@ const Calendar = () => {
   const [state, dispatch] = useReducer(calendarReducer, initialState);
 
   useEffect(() => {
-    document.title = `${format(state.currentDate, 'YYYY年MM月')}`;
+    document.title = `${dateFns.format(state.currentDate, 'YYYY年MM月')}`;
   }, [state.currentDate]);
 
   const now = new Date();
-  const beginning = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), 1);
-  const ending = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), lastDayOfMonth(state.currentDate).getDate());
+  const monthStart = dateFns.startOfMonth(state.currentDate);
+  const monthEnd = dateFns.endOfMonth(state.currentDate);
+  const startDate = dateFns.startOfWeek(monthStart);
+  const endDate = dateFns.endOfWeek(monthEnd);
+  // const dateFormat = "D";
+  const rows = [];
+  let days = [];
+  let day = startDate;
 
-  const prevMonth = addMonths(state.currentDate, -1);
-  const prevMonthEnding = lastDayOfMonth(prevMonth).getDate();
-  const nextMonth = addMonths(state.currentDate, 1);
-
-  // TODO: Util
-  const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
-  const prevMonthRemainders = range((prevMonthEnding - beginning.getDay() + 1), prevMonthEnding, 1);
-  const nextMonthRemainders = range(1, 6 - ending.getDay(), 1);
-
-  // TODO: Component
-  const prevMonthDays = prevMonthRemainders.map((n) => {
-    const day = new Date(prevMonth.getFullYear(), prevMonth.getMonth(), n);
-    const gridListTile = (
-      <GridListTile key={`prevMonthSpaceDay-${n}`}>
-        <DayCard>
-          <DayCardContent
-            today={0}
-            currentmonth={0}
-          >
-            <DayTypography
-              dayindex={day.getDay()}
-              holiday={(holidayJp.isHoliday(day)) ? 1 : 0}
+  while (day <= endDate) {
+    for (let i = 0; i < 7; i++) {
+      // formattedDate = dateFns.format(day, dateFormat);
+      days.push(
+        <GridListTile key={`day-${day.getDate()}`}>
+          <DayCard>
+            <DayCardContent
+              today={(state.currentDate.getFullYear() === now.getFullYear()
+                      && state.currentDate.getMonth() === now.getMonth()
+                      && day.getDate() === now.getDate()) ? 1 : 0}
+              currentmonth={(dateFns.isSameMonth(day, monthStart)) ? 1 : 0}
             >
-              {n}
-            </DayTypography>
-          </DayCardContent>
-        </DayCard>
-      </GridListTile>
-    );
-    return gridListTile;
-  });
-
-  // TODO: Component
-  const nextMonthDays = nextMonthRemainders.map((n) => {
-    const day = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), n);
-    const gridListTile = (
-      <GridListTile key={`nextMonthSpaceDay-${n}`}>
-        <DayCard>
-          <DayCardContent
-            today={0}
-            currentmonth={0}
-          >
-            <DayTypography
-              dayindex={day.getDay()}
-              holiday={(holidayJp.isHoliday(day)) ? 1 : 0}
-            >
-              {n}
-            </DayTypography>
-          </DayCardContent>
-        </DayCard>
-      </GridListTile>
-    );
-    return gridListTile;
-  });
-
-  const days = Array.from(Array(lastDayOfMonth(state.currentDate).getDate()).keys()).map(n => n + 1);
-  const calendars = days.map((n) => {
-    const day = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), n);
-    return (
-      <GridListTile key={`day-${n}`}>
-        <DayCard>
-          <DayCardContent
-            today={(state.currentDate.getFullYear() === now.getFullYear()
-                    && state.currentDate.getMonth() === now.getMonth()
-                    && n === now.getDate()) ? 1 : 0}
-            currentmonth={1}
-          >
-            <DayTypography
-              dayindex={day.getDay()}
-              holiday={(holidayJp.isHoliday(day)) ? 1 : 0}
-            >
-              {n}
-            </DayTypography>
-          </DayCardContent>
-        </DayCard>
-      </GridListTile>
-    );
-  });
+              <DayTypography
+                dayindex={day.getDay()}
+                holiday={(holidayJp.isHoliday(day)) ? 1 : 0}
+              >
+                {day.getDate()}
+              </DayTypography>
+            </DayCardContent>
+          </DayCard>
+        </GridListTile>
+      );
+      day = dateFns.addDays(day, 1);
+    }
+    rows.push(days);
+    days = [];
+  }
 
   return (
     <CalendarContext.Provider value={{ state, dispatch }}>
       <CalendarMenu />
-
       <GridList cols={7} cellHeight="auto">
         { dayOfTheWeekNames.map((w, i) => {
           const gridList = (
@@ -150,7 +104,7 @@ const Calendar = () => {
           );
           return gridList;
         })}
-        {[...prevMonthDays, ...calendars, ...nextMonthDays]}
+        { rows }
       </GridList>
     </CalendarContext.Provider>
   );
