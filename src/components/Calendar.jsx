@@ -12,16 +12,19 @@ import CalendarMenu from './CalendarMenu';
 // Colors
 const dayOfTheWeekNames = ['日', '月', '火', '水', '木', '金', '土'];
 const dayOfTheWeekColors = [
-  '#dd2c00',
+  '#dd2c00', // red
+  '#000000', // black
   '#000000',
   '#000000',
   '#000000',
   '#000000',
-  '#000000',
-  '#0091ea',
+  '#0091ea', // blue
 ];
-const dayColors = ['#f8f8f8', '#FFFFFF'];
-const todayColor = '#f1f8e9';
+const dayColors = [
+  '#f8f8f8', // thin gray
+  '#FFFFFF', // white
+];
+const todayColor = '#f1f8e9'; // ligth green
 
 const DayCard = styled(Card)`
   margin: 1px;
@@ -32,7 +35,7 @@ const DayCardContent = styled(CardContent)(props => css`
 `);
 
 const DayTypography = styled(Typography)`
-  color: ${props => (props.holiday ? '#dd2c00' : dayOfTheWeekColors[props.dayindex])} !important;
+  color: ${props => (props.holiday ? dayOfTheWeekColors[0] : dayOfTheWeekColors[props.dayindex])} !important;
 `;
 
 const Calendar = () => {
@@ -56,7 +59,7 @@ const Calendar = () => {
     day = dateFns.addDays(day, 1);
   }
 
-  const weeks = monthDays.map((d) => {
+  const days = monthDays.map((d) => {
     const gridListTile = (
       <GridListTile key={`day-${dateFns.format(d, 'YYYYMMDD')}`}>
         <DayCard>
@@ -103,7 +106,7 @@ const Calendar = () => {
           );
           return gridList;
         })}
-        { weeks }
+        { days }
       </GridList>
     </CalendarContext.Provider>
   );
