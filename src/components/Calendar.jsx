@@ -1,7 +1,8 @@
 import React, { useEffect, useContext, useReducer } from 'react';
+// eslint-disable-next-line object-curly-newline
 import { Card, CardContent, GridList, GridListTile, Typography } from '@material-ui/core';
 import styled, { css } from 'styled-components';
-import dateFns from "date-fns"
+import dateFns from 'date-fns';
 // import jaLocale from 'date-fns/locale/ja'
 import holidayJp from '@holiday-jp/holiday_jp';
 import CalendarContext from '../context';
@@ -47,38 +48,36 @@ const Calendar = () => {
   const monthEnd = dateFns.endOfMonth(state.currentDate);
   const startDate = dateFns.startOfWeek(monthStart);
   const endDate = dateFns.endOfWeek(monthEnd);
-  // const dateFormat = "D";
-  const rows = [];
-  let days = [];
-  let day = startDate;
 
+  let day = startDate;
+  const monthDays = [];
   while (day <= endDate) {
-    for (let i = 0; i < 7; i++) {
-      // formattedDate = dateFns.format(day, dateFormat);
-      days.push(
-        <GridListTile key={`day-${day.getDate()}`}>
-          <DayCard>
-            <DayCardContent
-              today={(state.currentDate.getFullYear() === now.getFullYear()
-                      && state.currentDate.getMonth() === now.getMonth()
-                      && day.getDate() === now.getDate()) ? 1 : 0}
-              currentmonth={(dateFns.isSameMonth(day, monthStart)) ? 1 : 0}
-            >
-              <DayTypography
-                dayindex={day.getDay()}
-                holiday={(holidayJp.isHoliday(day)) ? 1 : 0}
-              >
-                {day.getDate()}
-              </DayTypography>
-            </DayCardContent>
-          </DayCard>
-        </GridListTile>
-      );
-      day = dateFns.addDays(day, 1);
-    }
-    rows.push(days);
-    days = [];
+    monthDays.push(day);
+    day = dateFns.addDays(day, 1);
   }
+
+  const weeks = monthDays.map((d) => {
+    const gridListTile = (
+      <GridListTile key={`day-${day.getDate()}`}>
+        <DayCard>
+          <DayCardContent
+            today={(state.currentDate.getFullYear() === now.getFullYear()
+                    && state.currentDate.getMonth() === now.getMonth()
+                    && d.getDate() === now.getDate()) ? 1 : 0}
+            currentmonth={(dateFns.isSameMonth(d, monthStart)) ? 1 : 0}
+          >
+            <DayTypography
+              dayindex={d.getDay()}
+              holiday={(holidayJp.isHoliday(d)) ? 1 : 0}
+            >
+              {d.getDate()}
+            </DayTypography>
+          </DayCardContent>
+        </DayCard>
+      </GridListTile>
+    );
+    return gridListTile;
+  });
 
   return (
     <CalendarContext.Provider value={{ state, dispatch }}>
@@ -104,7 +103,7 @@ const Calendar = () => {
           );
           return gridList;
         })}
-        { rows }
+        { weeks }
       </GridList>
     </CalendarContext.Provider>
   );
