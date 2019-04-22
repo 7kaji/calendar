@@ -58,7 +58,7 @@ const Calendar = () => {
 
   const weeks = monthDays.map((d) => {
     const gridListTile = (
-      <GridListTile key={`day-${day.getDate()}`}>
+      <GridListTile key={`day-${dateFns.format(d, 'YYYYMMDD')}`}>
         <DayCard>
           <DayCardContent
             today={(state.currentDate.getFullYear() === now.getFullYear()
